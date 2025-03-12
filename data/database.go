@@ -1,36 +1,23 @@
 package data
 
 import (
-	"database/sql"
 	"fmt"
+	"studentsdetails/models"
 
-	"github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-var Db *sql.DB
+var Db *gorm.DB
 
-func DbConnect() (err error) {
-
-	cfg := mysql.Config{
-		User:   "root",
-		Passwd: "@Pachi840",
-		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
-		DBName: "prashanth",
-	}
-
-	// Get a database handle.
-	Db, err = sql.Open("mysql", cfg.FormatDSN())
+func DbConnect() {
+	dsn := "root:@Pachi840@tcp(127.0.0.1:3306)/prashanth?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err.Error())
-		return err
-	}
 
-	if err = Db.Ping(); err != nil {
-		fmt.Println(err.Error())
-		return err
 	}
-	fmt.Println("MySQL init done")
-	return nil
-
+	db.AutoMigrate(&models.Students{}, &models.Courses{})
+	fmt.Println("Database Connected Successfully")
+	Db = db
 }

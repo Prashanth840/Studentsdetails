@@ -1,18 +1,15 @@
 package models
 
-type Input struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-}
-
 type Students struct {
-	Student_id    int       `json:"id,omitempty"`
-	Student_name  string    `json:"student_name"`
-	Phone         string    `json:"phone,omitempty"`
-	Email         string    `json:"email,omitempty"`
-	Coursedetails []Courses `json:"course_details,omitempty"`
+	Id            int       `gorm:"column:id;primaryKey;autoIncrement" json:"id,omitempty"`
+	Name          string    `gorm:"column:name" json:"student_name" binding:"required"`
+	Phone         string    `gorm:"column:phone" json:"phone,omitempty" binding:"required"`
+	Email         string    `gorm:"column:email" json:"email,omitempty" binding:"required,email"`
+	Coursedetails []Courses `gorm:"foreignKey:Student_id" json:"course_details,omitempty"`
 }
 
 type Courses struct {
-	Course_name string `json:"course_name"`
+	Id         int    `gorm:"column:id;primaryKey;autoIncrement" json:"id,omitempty"`
+	Name       string `gorm:"column:name" json:"course_name" binding:"required"`
+	Student_id string `gorm:"column:student_id" json:"student_id,omitempty"`
 }

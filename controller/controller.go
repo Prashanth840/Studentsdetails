@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"database/sql"
 	"net/http"
 	"strconv"
 	"studentsdetails/models"
@@ -44,11 +43,11 @@ func GetStudentsdetails(c *gin.Context) {
 
 		data, err := repository.GetStudentdetails(val)
 		if err != nil {
-			if err == sql.ErrNoRows {
-				c.JSON(http.StatusAccepted, gin.H{"Message": "Student not Found"})
-				return
-			}
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if data.Id == 0 {
+			c.JSON(http.StatusAccepted, gin.H{"Message": "Student not Found"})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"data": data})
@@ -58,26 +57,27 @@ func GetStudentsdetails(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		msg, err := repository.Updatestudents(val, input)
-		if err != nil {
-			if err.Error() == "student not found" {
-				c.JSON(http.StatusAccepted, gin.H{"message": "Student not Found"})
-				return
-			}
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		msg := repository.Updatestudents(val, input)
+		if msg.Error != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": msg.Error})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"message": msg})
+		if msg.RowsAffected == 0 {
+			c.JSON(http.StatusAccepted, gin.H{"message": "Student not Found"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "Student updated successfully"})
 	} else {
-		msg, err := repository.Deletestudent(val)
-		if err != nil {
-			if err.Error() == "student not found" {
-				c.JSON(http.StatusAccepted, gin.H{"message": "Student not Found"})
-				return
-			}
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		msg := repository.Deletestudent(val)
+		if msg.Error != nil {
+
+			c.JSON(http.StatusInternalServerError, gin.H{"error": msg.Error})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"message": msg})
+		if msg.RowsAffected == 0 {
+			c.JSON(http.StatusAccepted, gin.H{"message": "Student not Found"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "Deleted Successfully"})
 	}
 }

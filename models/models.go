@@ -11,5 +11,5 @@ type Students struct {
 type Courses struct {
 	Id         int    `gorm:"column:id;primaryKey;autoIncrement" json:"id,omitempty"`
 	Name       string `gorm:"column:name" json:"course_name" binding:"required"`
-	Student_id string `gorm:"column:student_id" json:"student_id,omitempty"`
+	Student_id int    `gorm:"column:student_id" json:"student_id,omitempty"`
 }

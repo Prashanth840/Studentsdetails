@@ -7,9 +7,9 @@ import (
 )
 
 func Routes(r *gin.Engine) {
-	r.POST("/api/students", controller.Addstudentdetails)
+	r.POST("/api/students", controller.Createstudentdetails)
 	r.GET("/api/students/:id", controller.GetStudentsdetails)
-	r.GET("/api/students", controller.Addstudentdetails)
-	r.PUT("/api/students/:id", controller.GetStudentsdetails)
-	r.DELETE("/api/students/:id", controller.GetStudentsdetails)
+	r.GET("/api/students", controller.Getallstudents)
+	r.PUT("/api/students/:id", controller.Updatestudentdetails)
+	r.DELETE("/api/students/:id", controller.Deletestudentdetails)
 }

@@ -13,6 +13,23 @@ func CreateStudentDetails(input models.Students) (string, error) {
 	return "Student details added successfully", nil
 }
 
+func CreateCourseDetails(input models.Courses) (string, error) {
+	if err := data.Db.Create(&input).Error; err != nil {
+		return "", errors.New("failed to add course details")
+	}
+	return "Course details added successfully", nil
+}
+
+func UpdateCourse(id int, input models.Courses) (int64, error) {
+	result := data.Db.Model(&models.Courses{}).Where("id = ?", id).Updates(input)
+	return result.RowsAffected, result.Error
+}
+
+func DeleteCourse(id int) (int64, error) {
+	result := data.Db.Delete(&models.Courses{}, id)
+	return result.RowsAffected, result.Error
+}
+
 func GetStudentDetails(input int) (models.Students, error) {
 	var res models.Students
 	var students models.Students

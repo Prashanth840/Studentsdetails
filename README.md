@@ -6,7 +6,7 @@
 
 ## 2. Run the services
 
-- 🐳 From the project root, start Postgres, run migrations, and start the API:
+- 🐳 From the project root, start Postgres and the API:
 
 ```bash
 docker compose up -d --build
@@ -30,10 +30,10 @@ cp .env.example .env
 curl http://localhost:9001/api/students
 ```
 
-To run the Go binary directly on the host instead of in Docker (Postgres must already be reachable and migrated):
+To run the Go binary directly on the host instead of in Docker (Postgres must already be reachable):
 
 ```bash
-make run
+go run main.go
 ```
 
 ## 5. Understand the project architecture
@@ -52,7 +52,7 @@ This separation follows the **Single Responsibility Principle** and ensures a cl
 🖋️ Run the following command after every change to format your code:
 
 ```bash
-make fmt
+go fmt ./...
 ```
 
 ## 7. Code analysis
@@ -60,36 +60,10 @@ make fmt
 🔍 Run the following command to perform static code analysis:
 
 ```bash
-make vet
+go vet ./...
 ```
 
-## 8. Manage database migrations
-
-- 🛠️ Create new migration files (prompts for a name if `NAME` isn't given):
-
-```bash
-make migrate-new
-```
-
-- 🚀 Apply pending migrations:
-
-```bash
-make migrate-up
-```
-
-- ⏪ Roll back the last migration:
-
-```bash
-make migrate-down
-```
-
-Migration files live in `migrations/` and follow the `golang-migrate` `NNNNNN_description.up/down.sql` convention.
-
-## 9. Explore Makefile commands
-
-📜 The project includes a `Makefile` in the root directory. Run `make help` to list all available commands with descriptions.
-
-## 10. Environment variables
+## 8. Environment variables
 
 | Variable       | Default     | Description                                      |
 |----------------|-------------|---------------------------------------------------|
